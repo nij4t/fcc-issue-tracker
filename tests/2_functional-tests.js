@@ -29,7 +29,24 @@ suite('Functional Tests', function() {
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
-          
+
+          assert.property(res.body, 'issue_title');
+          assert.property(res.body, 'issue_text');
+          assert.property(res.body, 'created_on');
+          assert.property(res.body, 'updated_on');
+          assert.property(res.body, 'created_by');
+          assert.property(res.body, 'assigned_to');
+          assert.property(res.body, 'open');
+          assert.property(res.body, 'status_text');
+          assert.property(res.body, '_id');
+
+          assert.equal(res.body.issue_title, 'Title')
+          assert.equal(res.body.issue_text, 'text')
+          assert.equal(res.body.created_by, 'Functional Test - Every field filled in')
+          assert.equal(res.body.assigned_to, 'Chai and Mocha')
+          assert.equal(res.body.status_text, 'In QA')
+          assert.isBoolean(res.body.open)
+          assert.isTrue(res.body.open)
           //fill me in too!
           
           done();
