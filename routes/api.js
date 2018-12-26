@@ -37,7 +37,7 @@ module.exports = function(app) {
 
       if (!issue.issue_title || !issue.issue_text || !issue.created_by)
         res.json({ error: "missing inputs" });
-
+      else
       MongoClient.connect(CONNECTION_STRING).then(db => {
         db.collection(project)
           .insertOne(issue)
@@ -50,6 +50,15 @@ module.exports = function(app) {
 
     .put(function(req, res) {
       var project = req.params.project;
+      const _id = req.body._id;
+      delete req.body._id;
+      // Delete empty fields
+      Object.keys(req.body).map(k => {
+        if (req.body[k]) delete req.body[k];
+      });
+      const updates = req.body;
+      if (Object.keys(updates).length === 0)
+        res.json({ error: "nothing to update" });
     })
 
     .delete(function(req, res) {
