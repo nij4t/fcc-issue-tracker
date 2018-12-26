@@ -122,11 +122,11 @@ suite('Functional Tests', function() {
       });
       
       test('One field to update', function(done) {
-        
+      // TODO: One field to update (PUT /api/issues/{project} => text') 
       });
       
       test('Multiple fields to update', function(done) {
-        
+       // TODO: Multiple fields to update (PUT /api/issues/{project} => text')
       });
       
     });
@@ -154,11 +154,11 @@ suite('Functional Tests', function() {
       });
       
       test('One filter', function(done) {
-        
+        // TODO: No filter (GET /api/issues/{project} => Array of objects with issue data)
       });
       
       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
-        
+        // TODO: Multiple filters (test for multiple fields you know will be in the db for a return)
       });
       
     });
@@ -166,11 +166,11 @@ suite('Functional Tests', function() {
     suite('DELETE /api/issues/{project} => text', function() {
       
       test('No _id', function(done) {
-        
+        //TODO: No _id (DELETE /api/issues/{project} => text)
       });
       
       test('Valid _id', function(done) {
-        
+        //TODO: Valid _id (DELETE /api/issues/{project} => text)      
       });
       
     });
