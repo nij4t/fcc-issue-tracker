@@ -14,6 +14,8 @@ var server = require('../server');
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
+
+    var _id
   
     suite('POST /api/issues/{project} => object with issue data', function() {
       
@@ -73,6 +75,8 @@ suite('Functional Tests', function() {
           assert.property(res.body, 'status_text');
           assert.property(res.body, '_id');
 
+          _id = res.body._id
+
           assert.equal(res.body.issue_title, 'Title 2')
           assert.equal(res.body.issue_text, 'text')
           assert.equal(res.body.created_by, 'Functional Test - Required fields filled in')
@@ -106,7 +110,15 @@ suite('Functional Tests', function() {
     suite('PUT /api/issues/{project} => text', function() {
       
       test('No body', function(done) {
-        
+        chai.request(server)
+        .put('/api/issues/test')
+        .send({_id})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'error')
+          assert.equal(res.body.error, 'nothing to update')
+          done()
+        })
       });
       
       test('One field to update', function(done) {
