@@ -234,8 +234,8 @@ suite('Functional Tests', function() {
         .send({ _id })
         .end((err, res) => {
           assert.equal(res.status, 200)
-          assert.property(res.body, 'error')
-          assert.equal(res.body.error, 'deleted ' + _id)
+          assert.property(res.body, 'success')
+          assert.equal(res.body.success, 'deleted ' + _id)
           done()
         })
       });
