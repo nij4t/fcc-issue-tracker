@@ -218,6 +218,15 @@ suite('Functional Tests', function() {
       
       test('No _id', function(done) {
         //TODO: No _id (DELETE /api/issues/{project} => text)
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'error')
+          assert.equal(res.body.error, 'no valid _id')
+          done()
+        })
       });
       
       test('Valid _id', function(done) {
