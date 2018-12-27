@@ -20,6 +20,14 @@ module.exports = function(app) {
 
     .get(function(req, res) {
       var project = req.params.project;
+      if (req.query._id) req.query._id = new ObjectId(req.query._id);
+      MongoClient.connect(CONNECTION_STRING).then(db => {
+        db.collection(project)
+          .find(req.query)
+          .toArray()
+          .then(docs => res.json(docs))
+          .catch(err => res.json(err));
+      });
     })
 
     .post(function(req, res) {
@@ -55,9 +63,14 @@ module.exports = function(app) {
       delete req.body._id;
       // Delete empty fields
       Object.keys(req.body).map(k => {
-        if (!req.body[k]) delete req.body[k];
+        if (req.body[k].length === 0) delete req.body[k];
       });
+      console.log(req.body);
       const updates = req.body;
+      if (updates.open) {
+        updates.open = String(updates.open) == "true";
+      }
+
       if (Object.keys(updates).length === 0)
         // could be res.send() for project task
         res.json({ error: "nothing to update" });
