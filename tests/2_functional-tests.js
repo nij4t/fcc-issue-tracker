@@ -122,7 +122,6 @@ suite('Functional Tests', function() {
       });
       
       test('One field to update', function(done) {
-      // TODO: One field to update (PUT /api/issues/{project} => text')   
         chai.request(server)
         .put('/api/issues/test')
         .send({ _id: _id, issue_text: 'updates issue text' })
@@ -135,7 +134,16 @@ suite('Functional Tests', function() {
       });
       
       test('Multiple fields to update', function(done) {
-       // TODO: Multiple fields to update (PUT /api/issues/{project} => text')
+      //  TODO: Multiple fields to update (PUT /api/issues/{project} => text')
+        chai.request(server)
+        .put('/api/issues/test')
+        .send({ _id, issue_text: 'update for closing issue', open: false })
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'success')
+          assert.equal(res.body.success, 'successfully updated')
+          done()
+        })
       });
       
     });
