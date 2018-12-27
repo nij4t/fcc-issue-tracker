@@ -36,16 +36,17 @@ module.exports = function(app) {
       };
 
       if (!issue.issue_title || !issue.issue_text || !issue.created_by)
+        // could be res.send() for project task
         res.json({ error: "missing inputs" });
       else
-      MongoClient.connect(CONNECTION_STRING).then(db => {
-        db.collection(project)
-          .insertOne(issue)
-          .then(doc => {
-            issue._id = doc.insertedId;
-            res.json(issue);
-          });
-      });
+        MongoClient.connect(CONNECTION_STRING).then(db => {
+          db.collection(project)
+            .insertOne(issue)
+            .then(doc => {
+              issue._id = doc.insertedId;
+              res.json(issue);
+            });
+        });
     })
 
     .put(function(req, res) {
@@ -54,11 +55,27 @@ module.exports = function(app) {
       delete req.body._id;
       // Delete empty fields
       Object.keys(req.body).map(k => {
-        if (req.body[k]) delete req.body[k];
+        if (!req.body[k]) delete req.body[k];
       });
       const updates = req.body;
       if (Object.keys(updates).length === 0)
+        // could be res.send() for project task
         res.json({ error: "nothing to update" });
+      else
+        MongoClient.connect(CONNECTION_STRING).then(db => {
+          updates.updated_on = new Date();
+          db.collection(project)
+            .findAndModify(
+              { _id: new ObjectId(_id) },
+              [["_id", 1]],
+              { $set: updates },
+              { new: true }
+            )
+            .then(doc => res.json({ success: "successfully updated" }))
+            .catch(err =>
+              res.json({ error: "could not update " + _id + " " + err })
+            );
+        });
     })
 
     .delete(function(req, res) {
