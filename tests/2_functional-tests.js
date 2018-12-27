@@ -217,7 +217,6 @@ suite('Functional Tests', function() {
     suite('DELETE /api/issues/{project} => text', function() {
       
       test('No _id', function(done) {
-        //TODO: No _id (DELETE /api/issues/{project} => text)
         chai.request(server)
         .delete('/api/issues/test')
         .send({})
@@ -230,7 +229,6 @@ suite('Functional Tests', function() {
       });
       
       test('Valid _id', function(done) {
-        //TODO: Valid _id (DELETE /api/issues/{project} => text)
         chai.request(server)
         .delete('/api/issues/test')
         .send({})
