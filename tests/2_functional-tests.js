@@ -134,7 +134,6 @@ suite('Functional Tests', function() {
       });
       
       test('Multiple fields to update', function(done) {
-      //  TODO: Multiple fields to update (PUT /api/issues/{project} => text')
         chai.request(server)
         .put('/api/issues/test')
         .send({ _id, issue_text: 'update for closing issue', open: false })
@@ -171,7 +170,6 @@ suite('Functional Tests', function() {
       });
       
       test('One filter', function(done) {
-        // TODO: No filter (GET /api/issues/{project} => Array of objects with issue data)
         chai.request(server)
         .get('/api/issues/test')
         .query({ assigned_to: 'Chai and Mocha' })
@@ -193,7 +191,25 @@ suite('Functional Tests', function() {
       });
       
       test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
-        // TODO: Multiple filters (test for multiple fields you know will be in the db for a return)
+        chai.request(server)
+        .get('/api/issues/test')
+        .query({ _id })
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.isArray(res.body)
+          assert.property(res.body[0], 'issue_title');
+          assert.property(res.body[0], 'issue_text');
+          assert.property(res.body[0], 'created_on');
+          assert.property(res.body[0], 'updated_on');
+          assert.property(res.body[0], 'created_by');
+          assert.property(res.body[0], 'assigned_to');
+          assert.property(res.body[0], 'open');
+          assert.property(res.body[0], 'status_text');
+          assert.property(res.body[0], '_id');
+          assert.equal(res.body[0]['_id'], _id)
+          assert.isFalse(res.body[0]['open'])
+          done()
+        })
       });
       
     });
