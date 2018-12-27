@@ -65,7 +65,6 @@ module.exports = function(app) {
       Object.keys(req.body).map(k => {
         if (req.body[k].length === 0) delete req.body[k];
       });
-      console.log(req.body);
       const updates = req.body;
       if (updates.open) {
         updates.open = String(updates.open) == "true";
@@ -93,5 +92,14 @@ module.exports = function(app) {
 
     .delete(function(req, res) {
       var project = req.params.project;
+      if (!req.body._id)
+        res.json({ error: 'no valid _id' })
+      else
+        MongoClient.connect(CONNECTION_STRING)
+        .then(db => {
+          db.collection(project)
+          .findAndRemove({ _id: new ObjectId(req.body._id) })
+          .then(doc => res.json({ success: 'deleted ' + req.body._id }))
+        })
     });
 };
