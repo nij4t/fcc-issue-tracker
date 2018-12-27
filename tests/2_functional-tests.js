@@ -230,7 +230,16 @@ suite('Functional Tests', function() {
       });
       
       test('Valid _id', function(done) {
-        //TODO: Valid _id (DELETE /api/issues/{project} => text)      
+        //TODO: Valid _id (DELETE /api/issues/{project} => text)
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({})
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          assert.property(res.body, 'error')
+          assert.equal(res.body.error, 'deleted ' + _id)
+          done()
+        })
       });
       
     });
